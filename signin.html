@@ -13,32 +13,31 @@
 <body>
 
 	<div class="container">
-		<a href="address.html"><img src="Images/arrow-left.png" alt="" class="mt-4 py-1 pl-1"></a>
+		<a href="barber.html"><img src="Images/arrow-left.png" alt="" class="mt-4 py-1 pl-1"></a>
 		<div class="bkg-heading pl-1 mt-4">Sign in to continue</div>
-		<form action="deliveryconfirm.html">
-
+		<form id="signin-form">
 			<div class="row">
 				<div class="col-12" >
-					<small class="label">Error text</small>  <!-- Space for error text -->
-					<div class="input-group mt-1">
+					<div class="input-group input-clr mt-1">
 						<div class="input-group-prepend">
-							<span class="input-group-text" id="inputGroupPrepend3"><img src="Images/uk-flag.png"><span class="country-code">+44 |</span></span>
+							<span class="input-group-text pr-1" id="inputGroupPrepend3"><img src="Images/uk-flag.png"><span class="country-code">+44 |</span></span>
 						</div>
-						<input class="form-control phone-input" id="validationServerUsername" placeholder="Your phone" aria-describedby="inputGroupPrepend3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "12" required />
+						<input class="form-control phone-input" id="validationServerUsername" name="phone" placeholder="Your phone" aria-describedby="inputGroupPrepend3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "10" required />
 						<div class="invalid-feedback">Please fill out this field.</div>
 					</div>
 				</div>
 
 				<div class="form-group col-12 mt-2">
-					<input id="password-field" type="password" class="form-control input-height" placeholder="Password" name="password" value="" required />
+					<input id="password-field" type="password" class="form-control input-height input-clr" placeholder="Password" name="password" value="" pattern=".{8,}" required />
 					<span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
 					<div class="invalid-feedback">Please fill out this field.</div>
 				</div>
 				<div class="col-12 forgot-pass"><a href="resetpass.html" class="forgot-pass1">Forgot password?</a></div>
 			</div>
 			<div class="row my-3">
-				<div class="col-12 my-1"><input class="btn custom-btn" type="submit" value="Sign in"/></div>						
-				<div class="signup-text col-12">Living under a rock? <span><a href="signup.html" class="star-clr">Sign up</a></span></div>
+				<div class="col-12 my-1"><input class="btn custom-btn" type="submit" value="Sign in"/></div>
+				<small class="label" id="error-label"></small> <!-- Space for error text -->						
+				<div class="signup-text col-12 mt-1">Living under a rock? <span><a href="signup.html" class="star-clr">Sign up</a></span></div>
 			</div>
 		</form>
 		
@@ -63,6 +62,45 @@
 			}
 		});
 
+
+		$('.phone-input').on('keyup',function(){
+			if ($(this).val().length == 10 ){
+				$('.input-group').removeClass('input-clr');
+				$('.input-group').addClass('input-clr1');
+			}
+			else {
+				$('.input-group').removeClass('input-clr1');
+				$('.input-group').addClass('input-clr');
+			}
+		});
+
+	</script>
+	<script>
+		if (JSON.parse(localStorage.getItem('userData')) != null)
+			window.open("barber.html", '_self');
+
+		$('#signin-form').submit(function (e) {
+			e.preventDefault();
+			var formData = $(this).serializeArray();
+			const data = {
+				"phone_number": "+44" + formData[0]['value'],
+				"password": formData[1]['value'],
+			}
+			$.ajax({
+				type: "POST",
+				url: 'http://127.0.0.1:8000/api/users/login/',
+				data: data,
+				dataType: 'json',
+				success: function (data) {
+					localStorage.setItem('userData', JSON.stringify(data));
+					window.open("barber.html", '_self');
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					document.getElementById("error-label").innerHTML = "Phone Number or Password is incorrect"
+					localStorage.setItem('userData', null);
+				}
+			});
+		});
 	</script>
 </body>
 </html>
