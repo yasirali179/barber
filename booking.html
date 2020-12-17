@@ -14,17 +14,15 @@
 <body>
 
 	<div class="">
-		<div class="bkg-head container pr-0">
+		<div class="bkg-head container pr-0" id="fix">
 			<a href="barber.html"><img src="Images/arrow-left.png" alt="" class="mt-4 py-1 pl-1"></a>
 			<div class="bkg-heading pl-1 mt-4">Choose a time</div>
 			<div class="star-clr dec pl-1 mt-2 pt-1">December</div>
 			<div class="swiper mt-3 pb-3">
 				<div class="swiper-container">
 					<div class="swiper-wrapper">
-						<div class="swiper-slide bkg-day-slide active-days">
-							<div class="text-center pt-2 day-clr white-text">Sun</div>
-							<div class="text-center pb-2 pt-1">5</div>
-						</div>
+						
+						
 						<div class="swiper-slide bkg-day-slide disable">
 							<div class="text-center pt-2 day-clr">Mon</div>
 							<div class="text-center pb-2 pt-1">6</div>
@@ -235,7 +233,10 @@
 				depth: 0,
 				modifier: 1,
 				slideShadows: true
-			}
+			},
+			onSlideChangeEnd: function () {
+				console.log("yasir")
+			}			
 		});
 
 		$('.bkg-day-slide').click(function(){
@@ -255,11 +256,22 @@
 		$('.disable').click(function(){
 			$('#timings').hide();
 			$("#not-available").show();
-		});
-
-		
-
-		
+		});		
+	</script>
+	<script>
+		const date = new Date();
+		date.setDate(1)
+		const array =[date.setDate(1),date.setDate(2),date.setDate(3),date.setDate(4),date.setDate(5),date.setDate(6)]
+		console.log(array)
+		const a = document.getElementById("swiper-wrapper")
+		var d = document.createElement( 'div' );
+		d.innerHTML= `<div class="swiper-slide bkg-day-slide disable">
+			<div class="text-center pt-2 day-clr">Mon</div>
+			<div class="text-center pb-2 pt-1">6</div>
+		</div>`
+		array.map(date =>{
+			a.appendChild(d)
+		})
 	</script>
 </body>
 </html>
